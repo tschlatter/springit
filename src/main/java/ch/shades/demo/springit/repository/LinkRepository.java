@@ -8,7 +8,7 @@ import ch.shades.demo.springit.domain.Link;
 
 public interface LinkRepository extends JpaRepository<Link, Long> {
 
-	// Just some queries defined by the programmer
+	// Just some queries defined by the programmer in addition to the predefined ones
 	Link findByTitle(String title);
 	List<Link> findAllByTitleLikeOrderByCreationDateDesc(String title);
 }
