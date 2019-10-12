@@ -1,7 +1,6 @@
 package ch.shades.demo.springit;
 
-import java.util.List;
-
+import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import ch.shades.demo.springit.config.SpringitProperties;
-import ch.shades.demo.springit.domain.Comment;
-import ch.shades.demo.springit.domain.Link;
-import ch.shades.demo.springit.repository.CommentRepository;
-import ch.shades.demo.springit.repository.LinkRepository;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -34,6 +29,14 @@ public class SpringitApplication {
 		SpringApplication.run(SpringitApplication.class, args);
 	}
 
+	// Here we create a Bean so we don't have to instantiate PrettyTime on every Instantiation of Link
+	@Bean
+	PrettyTime prettyTime() {
+		return new PrettyTime();
+	}
+	
+	// Some stuff we did while the course was ongoing but we don't need it anymore
+	
 	@Bean
 	@Profile("dev")
 	@Order(1)
@@ -45,29 +48,29 @@ public class SpringitApplication {
 		};
 	}
 
-	@Bean
-	@Order(2)
-	CommandLineRunner dbrunner(LinkRepository linkRepository, CommentRepository commentRepository) {
-		return args -> {
-			Link link = new Link();
-			link.setTitle("Getting started with Spring Boot 2");
-			link.setUrl("https://therealdanvega.com/spring-boot-2");
-			linkRepository.save(link);
-			
-			Comment comment = new Comment();
-			comment.setBody("This Spring Boot 2 link is awesome!");
-			comment.setLink(link);
-			commentRepository.save(comment);
-			
-			link.addComment(comment);
-			
-			log.debug("Inserted a Link and a Comment.");
-			
-			// Test
-			Link firstLink = linkRepository.findByTitle("Getting started with Spring Boot 2");
-			log.debug("Found Title: " + firstLink.getTitle());
-			
-			//List<Link> links = linkRepository.findAllByTitleLikeOrderByCreationDateDesc("Spring Boot");
-		};
-	}
+//	@Bean
+//	@Order(2)
+//	CommandLineRunner dbrunner(LinkRepository linkRepository, CommentRepository commentRepository) {
+//		return args -> {
+//			Link link = new Link();
+//			link.setTitle("Getting started with Spring Boot 2");
+//			link.setUrl("https://therealdanvega.com/spring-boot-2");
+//			linkRepository.save(link);
+//			
+//			Comment comment = new Comment();
+//			comment.setBody("This Spring Boot 2 link is awesome!");
+//			comment.setLink(link);
+//			commentRepository.save(comment);
+//			
+//			link.addComment(comment);
+//			
+//			log.debug("Inserted a Link and a Comment.");
+//			
+//			// Test
+//			Link firstLink = linkRepository.findByTitle("Getting started with Spring Boot 2");
+//			log.debug("Found Title: " + firstLink.getTitle());
+//			
+//			//List<Link> links = linkRepository.findAllByTitleLikeOrderByCreationDateDesc("Spring Boot");
+//		};
+//	}
 }

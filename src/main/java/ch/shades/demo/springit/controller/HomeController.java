@@ -1,13 +1,21 @@
 package ch.shades.demo.springit.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
+@Controller
 public class HomeController {
 
-	@RequestMapping("/")
-	public String home() {
-		return "Hello Spring Boot 2!";
+// Removed the following because we have an index.html in ../resources/static
+//	@RequestMapping("/")
+//	public String home() {
+//		return "Hello Spring Boot 2!";
+//	}
+
+	@GetMapping("/home")
+	public String home(Model model) {
+		model.addAttribute("title", "Hello Thymeleaf!");
+		return "home";
 	}
 }

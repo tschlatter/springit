@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DatabaseLoader implements CommandLineRunner {
+public class DatabaseLoaderNotUsed implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
