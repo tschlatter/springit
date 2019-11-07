@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import ch.shades.demo.springit.config.SpringitProperties;
 
@@ -34,6 +34,15 @@ public class SpringitApplication {
 	PrettyTime prettyTime() {
 		return new PrettyTime();
 	}
+	
+	//////////////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ///////////////////////////
+	// TODO * Configuring this bean should not be needed once Spring Boot's Thymeleaf starter includes configuration
+	// TODO   for thymeleaf-extras-springsecurity5 (instead of thymeleaf-extras-springsecurity4)
+	@Bean
+	public SpringSecurityDialect securityDialect() {
+	    return new SpringSecurityDialect();
+	}
+	
 	
 	// Some stuff we did while the course was ongoing but we don't need it anymore
 	
