@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import ch.shades.demo.springit.config.SpringitProperties;
 
 @SpringBootApplication
-@EnableJpaAuditing
+//@EnableJpaAuditing Removed it because we start using JpaConfig with enabled Jpa Auditing, so we can use more fields for auditing
 @EnableConfigurationProperties(SpringitProperties.class)
 public class SpringitApplication {
 
