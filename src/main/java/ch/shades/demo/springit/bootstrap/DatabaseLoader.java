@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import ch.shades.demo.springit.domain.Comment;
 import ch.shades.demo.springit.domain.Link;
 import ch.shades.demo.springit.domain.Role;
 import ch.shades.demo.springit.domain.User;
@@ -51,8 +52,18 @@ public class DatabaseLoader implements CommandLineRunner {
         links.put("File download example using Spring REST Controller","https://www.jeejava.com/file-download-example-using-spring-rest-controller/");
 
         links.forEach((k,v) -> {
-            linkRepository.save(new Link(k,v));
-            // we will do something with comments later
+        	Link link = new Link(k, v);
+            linkRepository.save(link);
+
+            Comment spring = new Comment("Thank you for this link related to Spring Boot. I love it, great post!", link);
+            Comment security = new Comment("I love that you're talking about Spring Security", link);
+            Comment pwa = new Comment("What is this Progressive Web App thing all about? PWAs sound really cool.", link);
+            Comment comments[] = {spring, security, pwa};
+            for (Comment comment : comments) {
+                commentRepository.save(comment);
+                link.addComment(comment);
+            }
+
         });
 
         long linkCount = linkRepository.count();
