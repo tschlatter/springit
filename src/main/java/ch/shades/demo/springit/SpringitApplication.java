@@ -11,11 +11,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import ch.shades.demo.springit.config.SpringitProperties;
 
 @SpringBootApplication
+@EnableTransactionManagement
 //@EnableJpaAuditing Removed it because we start using JpaConfig with enabled Jpa Auditing, so we can use more fields for auditing
 @EnableConfigurationProperties(SpringitProperties.class)
 public class SpringitApplication {

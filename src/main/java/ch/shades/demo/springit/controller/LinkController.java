@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,29 +19,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ch.shades.demo.springit.domain.Comment;
 import ch.shades.demo.springit.domain.Link;
 import ch.shades.demo.springit.repository.CommentRepository;
-import ch.shades.demo.springit.repository.LinkRepository;
+import ch.shades.demo.springit.service.CommentService;
+import ch.shades.demo.springit.service.LinkService;
+
 
 @Controller
 public class LinkController {
 	private static final Logger logger = LoggerFactory.getLogger(LinkController.class);
 
-	private LinkRepository linkRepository;
-	private CommentRepository commentRepository;
+	private LinkService linkService;
+	private CommentService commentService;
 
-	public LinkController(LinkRepository linkRepository, CommentRepository commentRepository) {
-		this.linkRepository = linkRepository;
-		this.commentRepository = commentRepository;
+	public LinkController(LinkService linkService, CommentService commentService) {
+		this.linkService = linkService;
+		this.commentService = commentService;
 	}
 
 	@GetMapping("/")
 	public String list(Model model) {
-		model.addAttribute("links", linkRepository.findAll());
+		model.addAttribute("links", linkService.findAll());
 		return "link/list"; // The name of the template
 	}
 
 	@GetMapping("/link/{id}")
 	public String read(@PathVariable Long id, Model model) {
-		Optional<Link> link = linkRepository.findById(id);
+		Optional<Link> link = linkService.findById(id);
 		if (link.isPresent()) {
 			Link currentLink = link.get();
 			Comment comment = new Comment();
@@ -73,7 +76,7 @@ public class LinkController {
 			return "link/submit";
 		} else {
 			// Save our link
-			linkRepository.save(link);
+			linkService.save(link);
 			logger.info("New link was saved successfully");
 
 			redirectAttributes
@@ -90,7 +93,7 @@ public class LinkController {
 		if (bindingResult.hasErrors()) {
 			logger.info("There was a problem adding a new comment.");
 		} else {
-			commentRepository.save(comment);
+			commentService.save(comment);
 			logger.info("New comment was saved successfully");
 		}
 		
