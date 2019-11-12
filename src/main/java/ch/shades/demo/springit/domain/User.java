@@ -1,9 +1,7 @@
 package ch.shades.demo.springit.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,12 +13,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ch.shades.demo.springit.domain.validator.PasswordsMatch;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -33,6 +35,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Getter @Setter
 @ToString
+@PasswordsMatch		// our selfmade annotation to validate password with confirmpassword
 public class User implements UserDetails {
 
 	@Id @GeneratedValue
@@ -57,9 +60,37 @@ public class User implements UserDetails {
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
 	)
+	
 	private Set<Role> roles = new HashSet<>();
 
-	public void addRole(Role role) {
+    @NonNull
+    @NotEmpty(message = "You must enter First Name.")
+    private String firstName;
+
+    @NonNull
+    @NotEmpty(message = "You must enter Last Name.")
+    private String lastName;
+
+    @Transient		// Means this field will not be stored in the database
+    @Setter(AccessLevel.NONE)	// Means that Lombok doesn't generate a Setter
+    private String fullName;
+
+    @NonNull
+    @NotEmpty(message = "Please enter alias.")
+    @Column(nullable = false, unique = true)
+    private String alias;
+    
+    @Transient
+    @NotEmpty(message = "Please enter Password Confirmation")
+    private String confirmPassword; 
+    
+    private String activationCode;
+
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
+    
+    public void addRole(Role role) {
 		roles.add(role);
 	}
 	
